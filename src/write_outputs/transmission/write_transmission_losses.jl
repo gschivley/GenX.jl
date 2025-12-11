@@ -15,7 +15,7 @@ function write_transmission_losses(path::AbstractString,
 
     dfTLosses.AnnualSum = tlosses * inputs["omega"]
 
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         total = DataFrame(["Total" sum(dfTLosses.AnnualSum)], [:Line, :AnnualSum])
         dfTLosses = vcat(dfTLosses, total)
         CSV.write(joinpath(path, "tlosses.csv"), dfTLosses)

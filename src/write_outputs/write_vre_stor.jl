@@ -359,9 +359,9 @@ function write_vre_stor_charge(path::AbstractString, inputs::Dict, setup::Dict, 
         dfCharge_DC.AnnualSum .= charge_dc * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_dc_charge.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfCharge_DC)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, charge_dc, dfCharge_DC)
         end
     end
@@ -377,9 +377,9 @@ function write_vre_stor_charge(path::AbstractString, inputs::Dict, setup::Dict, 
         dfCharge_AC.AnnualSum .= charge_ac * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_ac_charge.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfCharge_AC)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, charge_ac, dfCharge_AC)
         end
     end
@@ -417,9 +417,9 @@ function write_vre_stor_discharge(path::AbstractString,
         dfDischarge_DC.AnnualSum .= power_vre_stor * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_dc_discharge.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfDischarge_DC)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, power_vre_stor, dfDischarge_DC)
         end
     end
@@ -436,9 +436,9 @@ function write_vre_stor_discharge(path::AbstractString,
         dfDischarge_AC.AnnualSum .= power_vre_stor * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_ac_discharge.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfDischarge_AC)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, power_vre_stor, dfDischarge_AC)
         end
     end
@@ -455,9 +455,9 @@ function write_vre_stor_discharge(path::AbstractString,
         dfVP_VRE_STOR.AnnualSum .= vre_vre_stor * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_wind_power.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfVP_VRE_STOR)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, vre_vre_stor, dfVP_VRE_STOR)
         end
     end
@@ -474,9 +474,9 @@ function write_vre_stor_discharge(path::AbstractString,
         dfVP_VRE_STOR.AnnualSum .= elec_vre_stor * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_elec_power_consumption.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfVP_VRE_STOR)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, elec_vre_stor, dfVP_VRE_STOR)
         end
     end
@@ -493,9 +493,9 @@ function write_vre_stor_discharge(path::AbstractString,
         dfVP_VRE_STOR.AnnualSum .= vre_vre_stor * inputs["omega"]
 
         filepath = joinpath(path, "vre_stor_solar_power.csv")
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             write_annual(filepath, dfVP_VRE_STOR)
-        else # setup["WriteOutputs"] == "full"
+        else # setup["WriteHourly"] == true
             write_fulltimeseries(filepath, vre_vre_stor, dfVP_VRE_STOR)
         end
     end

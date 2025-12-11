@@ -13,12 +13,12 @@ function write_transmission_flows(path::AbstractString,
     end
 
     filepath = joinpath(path, "flow.csv")
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         dfFlow.AnnualSum = flow * inputs["omega"]
         total = DataFrame(["Total" sum(dfFlow.AnnualSum)], [:Line, :AnnualSum])
         dfFlow = vcat(dfFlow, total)
         CSV.write(filepath, dfFlow)
-    else # setup["WriteOutputs"] == "full" 
+    else # setup["WriteHourly"] == true 
         dfFlow = hcat(dfFlow, DataFrame(flow, :auto))
         auxNew_Names = [Symbol("Line"); [Symbol("t$t") for t in 1:T]]
         rename!(dfFlow, auxNew_Names)

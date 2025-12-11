@@ -20,9 +20,9 @@ function write_virtual_discharge(path::AbstractString, inputs::Dict, setup::Dict
     dfVirtualDischarge.AnnualSum .= virtual_discharge * inputs["omega"]
 
     filepath = joinpath(path, "virtual_discharge.csv")
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         write_annual(filepath, dfVirtualDischarge)
-    else # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         write_fulltimeseries(filepath, virtual_discharge, dfVirtualDischarge)
     end
     return nothing

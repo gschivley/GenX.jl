@@ -45,7 +45,7 @@ function write_emissions(path::AbstractString, inputs::Dict, setup::Dict, EP::Mo
                                          scale_factor
         end
 
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             total = DataFrame(["Total" sum(dfEmissions.AnnualSum)], [:Zone; :AnnualSum])
             if setup["CO2Cap"] >= 1
                 total = DataFrame(
@@ -56,7 +56,7 @@ function write_emissions(path::AbstractString, inputs::Dict, setup::Dict, EP::Mo
             end
             dfEmissions = vcat(dfEmissions, total)
             CSV.write(joinpath(path, "emissions.csv"), dfEmissions)
-        else# setup["WriteOutputs"] == "full"
+        else# setup["WriteHourly"] == true
             dfEmissions = hcat(dfEmissions,
                 DataFrame(emissions_by_zone * scale_factor, :auto))
             if setup["CO2Cap"] >= 1
@@ -103,11 +103,11 @@ function write_emissions(path::AbstractString, inputs::Dict, setup::Dict, EP::Mo
                                          scale_factor
         end
 
-        if setup["WriteOutputs"] == "annual"
+        if !setup["WriteHourly"]
             total = DataFrame(["Total" sum(dfEmissions.AnnualSum)], [:Zone; :AnnualSum])
             dfEmissions = vcat(dfEmissions, total)
             CSV.write(joinpath(path, "emissions.csv"), dfEmissions)
-        else# setup["WriteOutputs"] == "full"
+        else# setup["WriteHourly"] == true
             dfEmissions = hcat(dfEmissions,
                 DataFrame(emissions_by_zone * scale_factor, :auto))
             auxNew_Names = [Symbol("Zone");

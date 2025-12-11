@@ -113,9 +113,10 @@ The following tables summarize the model settings parameters and their default/p
 ||1 = including the model equation as an output|
 ||0 = the model equation won't be included as an output|
 |WriteShadowPrices | Get the optimal values of dual variables of various model related constraints, including to estimate electricity prices, stored value of energy and the marginal CO2 prices.|
-| WriteOutputs | Flag for writing the model outputs with hourly resolution or just the annual sum.|
-|| "full" = write the model outputs with hourly resolution.|
-|| "annual" = write only the annual sum of the model outputs.|
+| WriteHourly | Flag for writing the model outputs with hourly resolution. Annual outputs are always written.|
+|| true = write the model outputs with hourly resolution in addition to annual outputs.|
+|| false = write only annual outputs (no hourly time series).|
+|| Note: The deprecated WriteOutputs parameter ("full"/"annual") is automatically converted to WriteHourly (true/false).|
 | OutputFullTimeSeries | Flag for writing the full time series of the model outputs.|
 ||1 = write the full time series of the model outputs.|
 ||0 = write only the reduced time series of the model outputs.|

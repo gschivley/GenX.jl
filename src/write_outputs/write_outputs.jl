@@ -578,10 +578,10 @@ end
 function write_temporal_data(
         df_annual, data, path::AbstractString, setup::Dict, filename::AbstractString)
     filepath = joinpath(path, filename * ".csv")
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         # df_annual is expected to have an AnnualSum column.
         write_annual(filepath, df_annual)
-    else # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         df_full = write_fulltimeseries(filepath, data, df_annual)
         if setup["OutputFullTimeSeries"] == 1 && setup["TimeDomainReduction"] == 1
             write_full_time_series_reconstruction(path, setup, df_full, filename)

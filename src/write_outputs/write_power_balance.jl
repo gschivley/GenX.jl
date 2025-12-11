@@ -108,9 +108,9 @@ function write_power_balance(path::AbstractString, inputs::Dict, setup::Dict, EP
     end
     dfPowerBalance.AnnualSum .= powerbalance * inputs["omega"]
 
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         CSV.write(joinpath(path, "power_balance.csv"), dfPowerBalance)
-    else # setup["WriteOutputs"] == "full"	
+    else # setup["WriteHourly"] == true	
         dfPowerBalance = hcat(dfPowerBalance, DataFrame(powerbalance, :auto))
         auxNew_Names = [Symbol("BalanceComponent");
                         Symbol("Zone");

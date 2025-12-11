@@ -9,4 +9,4 @@ MinCapReq: 0  # Activate minimum technology carveout constraints; 0 = not active
 MaxCapReq: 0  # Activate maximum technology carveout constraints; 0 = not active; 1 = active
 WriteShadowPrices: 1 # Write shadow prices of LP or relaxed MILP; 0 = not active; 1 = active
 DC_OPF: 1 #Flag for running DC-OPF: 0 = not active (transport model); 1 = active
-WriteOutputs: "annual"
+WriteHourly: false
