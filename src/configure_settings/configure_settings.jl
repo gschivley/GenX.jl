@@ -31,7 +31,7 @@ function default_settings()
         "HourlyMatching" => 0,
         "HydrogenHourlyMatching" => 0,
         "DC_OPF" => 0,
-        "WriteOutputs" => "full",
+        "WriteHourly" => true,
         "ComputeConflicts" => 0,
         "StorageVirtualDischarge" => 1,
         "ResourcesFolder" => "resources",
@@ -73,9 +73,33 @@ function validate_settings!(settings::Dict{Any, Any})
     # Check for any settings combinations that are not allowed.
     # If we find any then make a response and issue a note to the user.
 
-    # make WriteOutputs setting lowercase and check for valid value
-    settings["WriteOutputs"] = lowercase(settings["WriteOutputs"])
-    @assert settings["WriteOutputs"] ∈ ["annual", "full"]
+    # Handle backwards compatibility for WriteOutputs parameter
+    if haskey(settings, "WriteOutputs")
+        Base.depwarn("""The WriteOutputs setting has been deprecated. Please use the
+        WriteHourly setting instead. WriteOutputs="annual" maps to WriteHourly=false,
+        and WriteOutputs="full" maps to WriteHourly=true. Annual outputs are now always written.""",
+            :validate_settings!, force = true)
+        
+        # Convert old WriteOutputs to new WriteHourly setting
+        write_outputs_val = lowercase(string(settings["WriteOutputs"]))
+        @assert write_outputs_val ∈ ["annual", "full"] "WriteOutputs must be 'annual' or 'full'"
+        settings["WriteHourly"] = (write_outputs_val == "full")
+        delete!(settings, "WriteOutputs")
+    end
+
+    # Validate and normalize WriteHourly to boolean (accepts Bool or Int 0/1)
+    if haskey(settings, "WriteHourly")
+        val = settings["WriteHourly"]
+        if isa(val, Bool)
+            # Already a boolean, no conversion needed
+        elseif isa(val, Integer)
+            # Convert integer 0/1 to boolean
+            @assert val ∈ [0, 1] "WriteHourly must be a boolean (true/false) or integer (0/1)"
+            settings["WriteHourly"] = (val == 1)
+        else
+            error("WriteHourly must be a boolean (true/false) or integer (0/1)")
+        end
+    end
 
     if "OperationWrapping" in keys(settings)
         @warn """The behavior of the TimeDomainReduction and OperationWrapping
@@ -151,8 +175,8 @@ end
 function configure_writeoutput(output_settings_path::String, settings::Dict)
     writeoutput = default_writeoutput()
 
-    # don't write files with hourly data if settings["WriteOutputs"] == "annual"
-    if settings["WriteOutputs"] == "annual"
+    # don't write files with hourly data if settings["WriteHourly"] == false
+    if !settings["WriteHourly"]
         writeoutput["WritePrice"] = false
         writeoutput["WriteReliability"] = false
         writeoutput["WriteStorage"] = false

@@ -5,7 +5,7 @@ Write fuel consumption of each power plant.
 """
 function write_fuel_consumption(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
     write_fuel_consumption_plant(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
-    if setup["WriteOutputs"] != "annual"
+    if setup["WriteHourly"]
         write_fuel_consumption_ts(path::AbstractString,
             inputs::Dict,
             setup::Dict,

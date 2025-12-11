@@ -18,12 +18,12 @@ function write_nse(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
     end
     dfNse.AnnualSum .= nse * inputs["omega"]
 
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         total = DataFrame(["Total" 0 sum(dfNse[!, :AnnualSum])],
             [:Segment, :Zone, :AnnualSum])
         dfNse = vcat(dfNse, total)
         CSV.write(joinpath(path, "nse.csv"), dfNse)
-    else # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         dfNse = hcat(dfNse, DataFrame(nse, :auto))
         auxNew_Names = [Symbol("Segment");
                         Symbol("Zone");

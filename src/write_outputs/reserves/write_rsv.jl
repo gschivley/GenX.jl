@@ -11,9 +11,9 @@ function write_rsv(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
 
     dfRsv.AnnualSum = rsv * inputs["omega"]
 
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         write_annual(joinpath(path, "reserves.csv"), dfRsv)
-    else # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         unmet_vec = value.(EP[:vUNMET_RSV]) * scale_factor
         total_unmet = sum(unmet_vec)
         dfRsv = hcat(dfRsv, DataFrame(rsv, :auto))

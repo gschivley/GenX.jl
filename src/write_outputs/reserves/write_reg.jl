@@ -11,9 +11,9 @@ function write_reg(path::AbstractString, inputs::Dict, setup::Dict, EP::Model)
     dfReg.AnnualSum = reg * inputs["omega"]
 
     filepath = joinpath(path, "reg.csv")
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         write_annual(filepath, dfReg)
-    else # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         write_fulltimeseries(filepath, reg, dfReg)
     end
     return nothing

@@ -13,9 +13,9 @@ function write_reserve_margin_slack(path::AbstractString,
         dfResMar_slack.Penalty .*= ModelScalingFactor^2 # Convert Million $ to $
     end
 
-    if setup["WriteOutputs"] == "annual"
+    if !setup["WriteHourly"]
         CSV.write(joinpath(path, "ReserveMargin_prices_and_penalties.csv"), dfResMar_slack)
-    else     # setup["WriteOutputs"] == "full"
+    else # setup["WriteHourly"] == true
         temp_ResMar_slack = value.(EP[:vCapResSlack])
         if setup["ParameterScale"] == 1
             temp_ResMar_slack .*= ModelScalingFactor # Convert GW to MW
