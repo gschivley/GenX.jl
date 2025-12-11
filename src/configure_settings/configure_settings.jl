@@ -87,9 +87,18 @@ function validate_settings!(settings::Dict{Any, Any})
         delete!(settings, "WriteOutputs")
     end
 
-    # Validate WriteHourly is a boolean
+    # Validate and normalize WriteHourly to boolean (accepts Bool or Int 0/1)
     if haskey(settings, "WriteHourly")
-        @assert isa(settings["WriteHourly"], Bool) "WriteHourly must be a boolean (true or false)"
+        val = settings["WriteHourly"]
+        if isa(val, Bool)
+            # Already a boolean, no conversion needed
+        elseif isa(val, Integer)
+            # Convert integer 0/1 to boolean
+            @assert val ∈ [0, 1] "WriteHourly must be a boolean (true/false) or integer (0/1)"
+            settings["WriteHourly"] = (val == 1)
+        else
+            error("WriteHourly must be a boolean (true/false) or integer (0/1)")
+        end
     end
 
     if "OperationWrapping" in keys(settings)
